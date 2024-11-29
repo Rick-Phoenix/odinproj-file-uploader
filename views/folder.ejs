@@ -7,5 +7,37 @@
   </head>
   <body>
     <h1><%=folder.name%></h1>
+    <ul>
+      <% const subFolders = user.folders.filter((fldr) => fldr.parentId ===
+      folder.id)%> <%if (subFolders?.length) { %> <% for (const folder of
+      subFolders) { %>
+      <li>
+        <a href="/app/<%=folder.name%>"><%=folder.name%></a>
+        <form
+          action="/app/removeFolder"
+          id="<%=folder.id%>"
+          method="post"
+          onsubmit="confirmRemove(event)"
+        >
+          <input type="hidden" name="id" value="<%=folder.id%>" />
+          <button type="submit">Remove Folder</button>
+        </form>
+      </li>
+      <% } %> <% } %>
+    </ul>
+    <form action="/app/create/<%= folder.id %>" method="post">
+      <button type="submit">Add a new folder</button>
+    </form>
+    <a href="/app">Return to the homepage</a>
+
+    <script>
+      function confirmRemove(event) {
+        event.preventDefault();
+
+        const confirmation = confirm("Are you sure?");
+        if (!confirmation) return;
+        else event.target.submit();
+      }
+    </script>
   </body>
 </html>

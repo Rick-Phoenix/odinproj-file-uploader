@@ -7,18 +7,39 @@
   </head>
   <body>
     <h1>Welcome, <%=user.username%>!</h1>
+    <a href="/logout">Log Out</a>
     <h4>Your Folders</h4>
     <ul>
       <% if (user.folders.length > 0) { %> <% for (const folder of user.folders)
-      { %>
-      <li><a href="/app/<%=folder.name%>"><%=folder.name%></a></li>
-      <% } %> <% } %>
+      { %> <% if (!folder?.parentId) { %>
+      <li>
+        <a href="/app/<%=folder.id%>"><%=folder.name%></a>
+        <form
+          action="/app/removeFolder"
+          id="<%=folder.id%>"
+          method="post"
+          onsubmit="confirmRemove(event)"
+        >
+          <input type="hidden" name="id" value="<%=folder.id%>" />
+          <button type="submit">Remove Folder</button>
+        </form>
+      </li>
+      <% } %> <% } %> <% } %>
     </ul>
     <div>
-      <form action="/app/create" method="post">
+      <form action="/app/create/root" method="post">
         <button type="submit">Add a new folder</button>
       </form>
     </div>
-    <a href="/logout">Log Out</a>
+
+    <script>
+      function confirmRemove(event) {
+        event.preventDefault();
+
+        const confirmation = confirm("Are you sure?");
+        if (!confirmation) return;
+        else event.target.submit();
+      }
+    </script>
   </body>
 </html>

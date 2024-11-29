@@ -44,28 +44,34 @@ export async function getUserFiles(email) {
   return user;
 }
 
-export async function createFolder(userId, folderName, parentFolder) {
+export async function createFolder(userId, folderName, parentId) {
   await prisma.folder.create({
     data: {
       name: folderName,
-      userId: userId,
-      ...(parentFolder !== undefined && {
-        parent: { connect: { name: parentFolder } },
+      userId: +userId,
+      ...(parentId !== undefined && {
+        parentId: +parentId,
       }),
     },
   });
 }
 
-export async function findFolder(userId, folderName, parentFolder) {
+export async function findFolder(userId, folderId) {
   const folder = await prisma.folder.findFirst({
     where: {
-      userId: userId,
-      name: folderName,
-      ...(parentFolder !== undefined && {
-        parent: { connect: { name: parentFolder } },
-      }),
+      userId: +userId,
+      id: +folderId,
     },
   });
 
   return folder;
+}
+
+export async function deleteFolder(userId, folderId) {
+  await prisma.folder.delete({
+    where: {
+      userId: userId,
+      id: +folderId,
+    },
+  });
 }

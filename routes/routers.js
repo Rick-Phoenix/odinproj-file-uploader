@@ -6,6 +6,7 @@ import {
   deleteFolder,
   findFolder,
   getUsers,
+  renameFolder,
 } from "../prisma/queries.js";
 
 export const router = Router();
@@ -23,24 +24,35 @@ router.get("/app/:folderId", async (req, res) => {
   res.render("folder", { user: req.user, folder: currentFolder });
 });
 
+router.get("/app/rename/:folderId", async (req, res) => {
+  const folder = await findFolder(req.user.id, req.params.folderId);
+  if (!folder) return res.send("This folder does not exist.");
+  res.render("rename", { folder: folder });
+});
+
+router.post("/app/rename/:folderId", (req, res) => {
+  renameFolder(req.user.id, req.params.folderId, req.body.name);
+  res.redirect("/app");
+});
+
 router.post("/app/create/:parentFolderId", (req, res) => {
   res.render("newFolder", { parentFolderId: req.params.parentFolderId });
 });
 
 router.post("/app/add", async (req, res) => {
-  console.log(req.body);
-  const checkParent = await findFolder(req.user.id, req.body.parentFolderId);
-  if (!checkParent)
-    return res.send("The parent folder selected does not exist.");
-  else {
-    createFolder(req.user.id, req.body.name, req.body.parentFolderId);
-    res.redirect("/app");
+  if (req.body.parentFolderId) {
+    const checkParent = await findFolder(req.user.id, req.body.parentFolderId);
+    if (!checkParent)
+      return res.send("The parent folder selected does not exist.");
   }
+
+  createFolder(req.user.id, req.body.name, req.body.parentFolderId);
+  res.redirect("/app");
 });
 
 router.post("/app/removeFolder", (req, res) => {
   deleteFolder(req.user.id, req.body.id);
-  res.redirect("/");
+  res.redirect("/app");
 });
 
 router.post("/signup", signUpValidation);

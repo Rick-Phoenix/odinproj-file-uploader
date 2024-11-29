@@ -45,6 +45,7 @@ export async function getUserFiles(email) {
 }
 
 export async function createFolder(userId, folderName, parentId) {
+  console.log(parentId);
   await prisma.folder.create({
     data: {
       name: folderName,
@@ -71,6 +72,19 @@ export async function deleteFolder(userId, folderId) {
   await prisma.folder.delete({
     where: {
       userId: userId,
+      id: +folderId,
+    },
+  });
+}
+
+export async function renameFolder(userId, folderId, newName) {
+  await prisma.folder.update({
+    data: {
+      name: newName,
+    },
+
+    where: {
+      userId: +userId,
       id: +folderId,
     },
   });

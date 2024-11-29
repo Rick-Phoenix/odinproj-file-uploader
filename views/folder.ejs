@@ -12,7 +12,7 @@
       folder.id)%> <%if (subFolders?.length) { %> <% for (const folder of
       subFolders) { %>
       <li>
-        <a href="/app/<%=folder.name%>"><%=folder.name%></a>
+        <a href="/app/<%=folder.id%>"><%=folder.name%></a>
         <form
           action="/app/removeFolder"
           id="<%=folder.id%>"
@@ -21,6 +21,9 @@
         >
           <input type="hidden" name="id" value="<%=folder.id%>" />
           <button type="submit">Remove Folder</button>
+        </form>
+        <form action="/app/rename/<%=folder.id%>" method="get">
+          <button type="submit">Rename Folder</button>
         </form>
       </li>
       <% } %> <% } %>

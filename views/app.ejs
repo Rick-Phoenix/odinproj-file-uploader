@@ -23,6 +23,9 @@
           <input type="hidden" name="id" value="<%=folder.id%>" />
           <button type="submit">Remove Folder</button>
         </form>
+        <form action="/app/rename/<%=folder.id%>" method="get">
+          <button type="submit">Rename Folder</button>
+        </form>
       </li>
       <% } %> <% } %> <% } %>
     </ul>

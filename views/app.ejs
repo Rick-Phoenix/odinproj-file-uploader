@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uploader</title>
+  </head>
+  <body>
+    <h1>Welcome, <%=user.username%>!</h1>
+    <h4>Your Folders</h4>
+    <ul>
+      <% if (user.folders.length > 0) { %> <% for (const folder of user.folders)
+      { %>
+      <li><a href="/app/<%=folder.name%>"><%=folder.name%></a></li>
+      <% } %> <% } %>
+    </ul>
+    <div>
+      <form action="/app/create" method="post">
+        <button type="submit">Add a new folder</button>
+      </form>
+    </div>
+    <a href="/logout">Log Out</a>
+  </body>
+</html>

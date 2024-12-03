@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=file.name%></title>
+  </head>
+  <body>
+    <h1><%=file.name%></h1>
+    <h3>Location:</h3>
+    <%= folder %>
+    <h3>Size:</h3>
+    <%= file.size / 1000000 + ' MB' %>
+    <form action="" method="post" onsubmit="confirmRemove(event)">
+      <input type="hidden" name="fileId" value="<%=file.id%>" />
+      <button type="submit">Delete file</button>
+    </form>
+
+    <script>
+      function confirmRemove(event) {
+        event.preventDefault();
+
+        const confirmation = confirm("Are you sure?");
+        if (!confirmation) return;
+        else event.target.submit();
+      }
+    </script>
+  </body>
+</html>

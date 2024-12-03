@@ -11,6 +11,7 @@
       <% const subFolders = user.folders.filter((fldr) => fldr.parentId ===
       folder.id)%> <%if (subFolders?.length) { %> <% for (const folder of
       subFolders) { %>
+      <h3>Subfolders</h3>
       <li>
         <a href="/app/<%=folder.id%>"><%=folder.name%></a>
         <form
@@ -31,6 +32,15 @@
     <form action="/app/create/<%= folder.id %>" method="post">
       <button type="submit">Add a new folder</button>
     </form>
+    <h3>Files</h3>
+    <% if (!folder.files.length) { %> No files uploaded in this folder yet. <% }
+    else { %>
+    <ul>
+      <% for (const file of folder.files) { %>
+      <li><a href="/app/file/<%=file.id%>"><%= file.name %></a></li>
+      <% } %>
+    </ul>
+    <% } %>
     <a href="/app">Return to the homepage</a>
 
     <script>

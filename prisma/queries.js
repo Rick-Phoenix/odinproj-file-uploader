@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { name } from "ejs";
 
 const prisma = new PrismaClient();
 
@@ -63,6 +62,9 @@ export async function findFolder(userId, folderId) {
       userId: +userId,
       id: +folderId,
     },
+    include: {
+      files: true,
+    },
   });
 
   return folder;
@@ -86,6 +88,34 @@ export async function renameFolder(userId, folderId, newName) {
     where: {
       userId: +userId,
       id: +folderId,
+    },
+  });
+}
+
+export async function addFile(fileData) {
+  const newFile = await prisma.file.create({
+    data: {
+      ...fileData,
+    },
+  });
+
+  console.log("Entry DB: ", newFile);
+}
+
+export async function getFileById(id) {
+  const file = await prisma.file.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  return file;
+}
+
+export async function deleteFile(id) {
+  await prisma.file.delete({
+    where: {
+      id: id,
     },
   });
 }
